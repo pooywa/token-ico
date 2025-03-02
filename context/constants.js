@@ -1,3 +1,17 @@
+import { ethers } from("ethers");
+import Web3Modal from "web3modal";
+
+import tokenICO from "../contracts/TokenICO.sol";
+import erc20 from "../contracts/ERC20.sol";
+
+export const TOKEN_ADDRESS = "";
+export const ERC20_ABI = "";
+
+export const OWNER_ADDRESS = "";
+
+export const CONTRACT_ADDRESS = "";
+export const CONTRACT_ABI = "";
+
 const networks = {
   sepolia: {
     chainId: `0x${Number(11155111).toString(16)}`,
@@ -100,5 +114,186 @@ const networks = {
   },
 };
 
-const tokenImage =
-      "https://www.daulathussain.com/wp-content/uploads/2024/05/theblockchaincoders.jpg";
+
+export const changeNetwork = async ({networkName}) => {
+  try {
+    if (!window.ethereum) throw new Error("Metamask not found");
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          ...networks[networkName],
+        },
+      ],
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const handleNetworkSwitch = async () => {
+  const networkName = "holesky";
+  await changeNetwork({networkName});
+};
+
+export const CHECK_WALLET_CONNECTED = async () => {
+  if (!window.ethereum) return console.log("Please install Metamask");
+  await handleNetworkSwitch();
+
+  const account = await window.ethereum.request({method: "eth_accounts"});
+  if (account.lenth) {
+    return account[0];
+  } else {
+    console.log("Please Install & connect your wallet");
+  }
+};
+
+export const CONNECT_WALLET = async () => {
+  try {
+    if (!window.ethereum) return console.log("Please install Metamask");
+    await handleNetworkSwitch();
+  
+    const account = await window.ethereum.request({method: "eth_requestAccounts"});
+
+    window.location.reload();
+    
+    return account[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchContract = (address, abi, signer) => 
+  new ethers.Contract(address, abi, signer);
+
+export const TOKEN_ICO_CONTRACT = async () => {
+  try {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+
+    const contract = fetchContract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    return contract;
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const ERC20 = async () => {
+  try {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+
+    const network = await provider.getNetwork();
+    const signer = provider.getSigner();
+
+    const userAddress = signer.getAddress();
+    const balance = await contract.balanceOf(userAddress);
+
+    const name = await contract.name();
+    const symbol = await contract.symbol();
+    const supply = await contract.supply();
+    const decimals = await contract.decimals();
+    const address = await contract.address;
+
+    const token = {
+      address: address,
+      name: name,
+      symbol: symbol,
+      decimals: decimals,
+      supply: ethers.utils.formatEther(supply.toString()),
+      balance: ethers.utils.formatEther(balance.toString()),
+      chainId: network.chainId,
+    };
+
+    console.log(token);
+    return token;
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const ERC20_CONTRACT = async () => {
+  try {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+
+    const contract = fetchContract(CONTRACT_ADDRESS, ERC20_ABI, signer);
+    return contract;
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const GET_BALANCE = async () => {
+  try {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+
+    const maticBal = await signer.getBalance();
+    
+    return ethers.utils.formatEther(maticBal.toString());
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const CHECK_ACCOUNT_BALANCE = async (ADDRESS) => {
+  try {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+
+    const maticBal = await signer.getBalance(ADDRESS);
+    
+    return ethers.utils.formatEther(maticBal.toString());
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addtokenToMetaMask = async () => {
+  if (window.ethereum) {
+    const tokenDetails = await ERC20(TOKEN_ADDRESS);
+
+    const tokenDecimals = tokenDetails?.decimals;
+    const tokenAddress = TOKEN_ADDRESS;
+    const tokenSymbol = tokenDetails?.symbol;
+    const tokenImage = "";
+
+    try {
+      const wasAdded = await window.ethereum.request({
+        method: "wallet_watchAssets",
+        params:{
+          type: "ERC20",
+          option:{
+            address: tokenAddress,
+            symbol: tokenSymbol,
+            decimals: tokenDecimals,
+            image: tokenImage,
+          },
+        },
+      });
+      if(wasAdded) {
+        return "token Added!";
+      } else {
+        return "failed to add";
+      }
+    } catch (error) {
+      return "failed to add";
+    }
+  } else {
+    return "MetaMask isn`t Installed yet";
+  }
+}
