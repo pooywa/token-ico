@@ -1,4 +1,4 @@
-import React, {Children, useState} from "react";
+import React, { useState } from "react";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
 
@@ -7,7 +7,7 @@ import {
     CHECK_ACCOUNT_BALANCE,
     CHECK_WALLET_CONNECTED,
     GET_BALANCE,
-    TOKEN_ICO_CONTRACT,
+    TOKEN_ICO_CONTRACT as TOKEN_ICO_CONTRACT_FROM_CONSTANTS,
     ERC20, ERC20_CONTRACT,
     TOKEN_ADDRESS,
     addtokenToMetaMask,
@@ -15,7 +15,7 @@ import {
 
 export const TOKEN_ICO_CONTRACT = React.createContext();
 
-export const TOKEN_ICO_Provider = ({childer}) => {
+export const TOKEN_ICO_Provider = ({ childern }) => {
     const DAPP_NAME = "TOKEN ICO DAPP";
     const currency = "ETH";
     const network = "Holesky";
@@ -271,5 +271,5 @@ export const TOKEN_ICO_Provider = ({childer}) => {
         loader,
         account,
         currency,
-    }}>{childer}</TOKEN_ICO_Context.Provider>
+    }}>{ childern }</TOKEN_ICO_Context.Provider>
 };
