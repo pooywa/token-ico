@@ -7,15 +7,15 @@ import {
     CHECK_ACCOUNT_BALANCE,
     CHECK_WALLET_CONNECTED,
     GET_BALANCE,
-    TOKEN_ICO_CONTRACT as TOKEN_ICO_CONTRACT_FROM_CONSTANTS,
+    TOKEN_ICO_CONTRACT,
     ERC20, ERC20_CONTRACT,
     TOKEN_ADDRESS,
     addtokenToMetaMask,
 } from "./constants";
 
-export const TOKEN_ICO_CONTRACT = React.createContext();
+export const TOKEN_ICO_CONTEXT = React.createContext();
 
-export const TOKEN_ICO_Provider = ({ childern }) => {
+export const TOKEN_ICO_Provider = ({ children }) => {
     const DAPP_NAME = "TOKEN ICO DAPP";
     const currency = "ETH";
     const network = "Holesky";
@@ -24,13 +24,13 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
     const [account, setAccount] = useState();
     const [count, setCount] = useState(0);
 
-    const notifySuccess = (msg) => toast.success(msg, {duration: 2000});
+    const notifySuccess = (msg) => toast.success(msg, { duration: 2000 });
 
-    const notifyError = (msg) => toast.error(msg, {duration: 2000});
+    const notifyError = (msg) => toast.error(msg, { duration: 2000 });
 
     // ------- Contract Function -------
 
-    const TOKEN_ICO = async ()=> {
+    const TOKEN_ICO = async () => {
         try {
             const address = await CHECK_WALLET_CONNECTED();
             if (address) {
@@ -56,7 +56,7 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
                     owner: contractOwner.toLowerCase(),
                     soldTokens: soldTokens.toLowerCase(),
                 };
-                setLoader(false); 
+                setLoader(false);
             }
         } catch (error) {
             console.log(error);
@@ -65,7 +65,7 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const BUY_TOKEN = async (amount)=> {
+    const BUY_TOKEN = async (amount) => {
         try {
             setLoader(true);
             const address = await CHECK_WALLET_CONNECTED();
@@ -96,7 +96,7 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const TOKEN_WITHDRAW = async ()=> {
+    const TOKEN_WITHDRAW = async () => {
         try {
             setLoader(true);
             const address = await CHECK_WALLET_CONNECTED();
@@ -125,7 +125,7 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const UPDATE_TOKEN = async (_address)=> {
+    const UPDATE_TOKEN = async (_address) => {
         try {
             setLoader(true);
             const address = await CHECK_WALLET_CONNECTED();
@@ -147,7 +147,7 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const UPDATE_TOKEN_PRICE = async (price)=> {
+    const UPDATE_TOKEN_PRICE = async (price) => {
         try {
             setLoader(true);
             const address = await CHECK_WALLET_CONNECTED();
@@ -170,7 +170,7 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const DONATE = async (AMOUNT)=> {
+    const DONATE = async (AMOUNT) => {
         try {
             setLoader(true);
             const address = await CHECK_WALLET_CONNECTED();
@@ -196,11 +196,11 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const TRANSFER_ETHER = async (transfer)=> {
+    const TRANSFER_ETHER = async (transfer) => {
         try {
             setLoader(true);
 
-            const {_receiver, _amount} = transfer;
+            const { _receiver, _amount } = transfer;
             const address = await CHECK_WALLET_CONNECTED();
 
             if (address) {
@@ -224,11 +224,11 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    const TRANSFER_TOKEN = async (transfer)=> {
+    const TRANSFER_TOKEN = async (transfer) => {
         try {
             setLoader(true);
 
-            const {_tokenAddress , _sendTo, _amount} = transfer;
+            const { _tokenAddress, _sendTo, _amount } = transfer;
             const address = await CHECK_WALLET_CONNECTED();
 
             if (address) {
@@ -252,24 +252,28 @@ export const TOKEN_ICO_Provider = ({ childern }) => {
         }
     };
 
-    return <TOKEN_ICO_Context.Provider value={{
-        TOKEN_ICO,
-        BUY_TOKEN,
-        TRANSFER_ETHER,
-        DONATE,
-        UPDATE_TOKEN,
-        UPDATE_TOKEN_PRICE,
-        TOKEN_WITHDRAW,
-        TRANSFER_TOKEN,
-        CONNECT_WALLET,
-        ERC20,
-        CHECK_ACCOUNT_BALANCE,
-        setAccount,
-        setLoader,
-        addtokenToMetaMask,
-        TOKEN_ADDRESS,
-        loader,
-        account,
-        currency,
-    }}>{ childern }</TOKEN_ICO_Context.Provider>
+    return (
+        <TOKEN_ICO_CONTEXT.Provider value={{
+            TOKEN_ICO,
+            BUY_TOKEN,
+            TRANSFER_ETHER,
+            DONATE,
+            UPDATE_TOKEN,
+            UPDATE_TOKEN_PRICE,
+            TOKEN_WITHDRAW,
+            TRANSFER_TOKEN,
+            CONNECT_WALLET,
+            ERC20,
+            CHECK_ACCOUNT_BALANCE,
+            setAccount,
+            setLoader,
+            addtokenToMetaMask,
+            TOKEN_ADDRESS,
+            loader,
+            account,
+            currency,
+        }}>
+            {children}
+        </TOKEN_ICO_CONTEXT.Provider>
+    );
 };
