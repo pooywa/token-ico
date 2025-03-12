@@ -1,17 +1,21 @@
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 
-import tokenICO from "../contracts/TokenICO.sol";
-import erc20 from "../contracts/ERC20.sol";
+// Remove these imports
+// import tokenICO from "../contracts/TokenICO.sol";
+// import erc20 from "../contracts/ERC20.sol";
 
+// Import JSON files
+import tokenICOAbi from "../abis/tokenICO.json";
+import erc20Abi from "../abis/erc20.json";
 
 export const TOKEN_ADDRESS = "0xB801F23865AF75123778a3F7676Bbd5Ec5cd67A1";
-export const ERC20_ABI = "erc20.abi";
+export const ERC20_ABI = erc20Abi; // Use the ABI JSON directly
 
 export const OWNER_ADDRESS = "0x323A3C6a607530528f8913F64Fb8123056019DcE";
 
 export const CONTRACT_ADDRESS = "0xF4291F7F9D7b9d60d99A0325fA1f5bC575aa33a3";
-export const CONTRACT_ABI = "tokenICO.abi";
+export const CONTRACT_ABI = tokenICOAbi; // Use the ABI JSON directly
 
 const networks = {
   sepolia: {
